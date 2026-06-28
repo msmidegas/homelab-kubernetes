@@ -1,8 +1,12 @@
 services:
   web:
-    image: nginx:alpine
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    command: sh -c "npm install && node index.js"
     ports:
-      - "8080:80"
+      - "8080:3000"
     depends_on:
       - db
 

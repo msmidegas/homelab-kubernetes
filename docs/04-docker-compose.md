@@ -31,3 +31,18 @@ To simulate real-world application architecture with backend storage.
 
 Used Docker volume:
 db_data → persists database data across container restarts.
+
+## Multi-container setup
+
+Project now includes:
+
+- nginx web container
+- postgres database container
+- Docker internal networking
+
+## Key concept
+
+Containers communicate using service names (DNS), not IP addresses.
+
+Example:
+db:5432
