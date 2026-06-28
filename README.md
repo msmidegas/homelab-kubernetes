@@ -9,3 +9,11 @@ Build a full Kubernetes homelab with:
 
 ## Status
 🚧 Starting from zero
+
+## Architecture
+
+See `/docs` for full documentation.
+
+## Access
+
+http://192.168.1.114:8080
