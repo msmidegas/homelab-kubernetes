@@ -6,16 +6,13 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VM_IP}}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          script: |
-            cd compose-db
-            git pull
-            docker compose up -d --build
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Deploy
+        run: |
+          cd compose-db
+          git pull
+          docker compose up -d --build
