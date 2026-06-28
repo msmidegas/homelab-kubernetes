@@ -1,9 +1,9 @@
 services:
   web:
     image: node:20
-    working_dir: /app
+    working_dir: /apps
     volumes:
-      - ./app:/app
+      - ./apps:/apps
     command: sh -c "npm install && node index.js"
     ports:
       - "8080:3000"
