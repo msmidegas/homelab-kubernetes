@@ -94,7 +94,11 @@ app.get('/users', async (req, res) => {
 async function start() {
   await initDB();
   await testDB();
-
+  if (require.main === module ) {
+	  app.listen(port,() => {
+		  console.log ('App running on port ${port}');
+	  });
+  }
   app.listen(port, () => {
     console.log(`🚀 App running on port ${port}`);
   });
