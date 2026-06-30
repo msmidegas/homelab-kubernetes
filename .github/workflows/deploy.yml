@@ -10,6 +10,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Debug GitHub Secrets
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        run: |
+          echo "===== DEBUG ====="
+          echo "POSTGRES_USER=$POSTGRES_USER"
+          echo "POSTGRES_DB=$POSTGRES_DB"
+          echo "POSTGRES_PASSWORD length=${#POSTGRES_PASSWORD}"
+          echo "================="
 
       - name: Deploy
         env:
