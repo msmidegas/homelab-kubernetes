@@ -15,4 +15,4 @@ jobs:
       - name: Build Docker image
         run: |
           echo "Building project..."
-          docker build -t homelab-app ./app || true
+          docker build -t homelab-app ./apps
