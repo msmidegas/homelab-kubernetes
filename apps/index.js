@@ -58,7 +58,30 @@ app.get('/users', async (req, res) => {
   );
   res.json(result.rows);
 });
+// 🏠 ROOT
+app.get("/", (req, res) => {
+  res.json({
+    service: "homelab-kubernetes",
+    status: "running"
+  });
+});
 
+// ❤️ HEALTH
+app.get("/health", async (req, res) => {
+  try {
+    await pool.query("SELECT 1");
+
+    res.json({
+      status: "ok",
+      database: "connected"
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      error: err.message
+    });
+  }
+});
 // 🚀 START
 async function start() {
   await initDB();
