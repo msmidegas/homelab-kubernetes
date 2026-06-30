@@ -8,7 +8,7 @@ Build a full Kubernetes homelab with:
 - Monitoring (Prometheus + Grafana)
 
 ## Status
-🚧 Starting from zero
+Starting from zero to chall
 
 ## Architecture
 
