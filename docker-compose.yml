@@ -4,6 +4,7 @@ services:
     working_dir: /apps
     volumes:
       - ./apps:/apps
+      - /apps/node_modules
     command: sh -c "npm install && node index.js"
     ports:
       - "8080:3000"
