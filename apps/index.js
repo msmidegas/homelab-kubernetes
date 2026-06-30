@@ -6,54 +6,27 @@ app.use(express.json());
 
 const port = 3000;
 
-/**
- * 🔥 DB CONNECTION POOL (PRODUCTION STYLE)
- */
+// 🔥 DB CONFIG (bitno: koristi ENV varijable)
 const pool = new Pool({
   host: 'db',
-  user: 'appuser',
-  password: 'apppass',
-  database: 'appdb',
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DB,
   port: 5432,
-  max: 10,
-  idleTimeoutMillis: 30000,
 });
 
-/**
- * 🧪 TEST CONNECTION ON START
- */
+// 🧪 TEST CONNECTION
 async function testDB() {
   try {
     const res = await pool.query('SELECT NOW()');
     console.log('✅ DB connected:', res.rows[0].now);
   } catch (err) {
-    console.error('❌ DB connection failed:', err);
+    console.error('❌ DB connection failed:', err.message);
     process.exit(1);
   }
 }
 
-/**
- * 🚀 HEALTH ENDPOINT
- */
-app.get('/health', async (req, res) => {
-  try {
-    const db = await pool.query('SELECT 1 as ok');
-    res.json({
-      status: 'ok',
-      db: db.rows[0].ok,
-      time: new Date().toISOString(),
-    });
-  } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      error: err.message,
-    });
-  }
-});
-
-/**
- * 👤 CREATE USERS TABLE (AUTO INIT)
- */
+// 📦 INIT TABLE
 async function initDB() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
@@ -66,9 +39,7 @@ async function initDB() {
   console.log('📦 users table ready');
 }
 
-/**
- * ➕ CREATE USER
- */
+// ➕ CREATE USER
 app.post('/users', async (req, res) => {
   const { name } = req.body;
 
@@ -80,25 +51,19 @@ app.post('/users', async (req, res) => {
   res.json(result.rows[0]);
 });
 
-/**
- * 📥 GET USERS
- */
+// 📥 GET USERS
 app.get('/users', async (req, res) => {
-  const result = await pool.query('SELECT * FROM users ORDER BY id DESC');
+  const result = await pool.query(
+    'SELECT * FROM users ORDER BY id DESC'
+  );
   res.json(result.rows);
 });
 
-/**
- * 🚀 START SERVER (SAFE BOOTSTRAP)
- */
+// 🚀 START
 async function start() {
   await initDB();
   await testDB();
-  if (require.main === module ) {
-	  app.listen(port,() => {
-		  console.log ('App running on port ${port}');
-	  });
-  }
+
   app.listen(port, () => {
     console.log(`🚀 App running on port ${port}`);
   });
