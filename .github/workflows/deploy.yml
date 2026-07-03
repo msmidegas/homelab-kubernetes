@@ -7,19 +7,22 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Clean workspace
         run: |
           sudo rm -rf $GITHUB_WORKSPACE/apps/node_modules || true
+
       - name: Deploy
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         run: |
           echo "Starting deployment..."
-
-          export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
-          export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-          export POSTGRES_DB=${{ secrets.POSTGRES_DB }}
 
           echo "Stopping old containers..."
           docker compose down -v
