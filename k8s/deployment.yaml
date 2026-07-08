@@ -1,5 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: homelab-web
 
@@ -18,11 +19,16 @@ spec:
     spec:
       containers:
         - name: web
+
           image: ghcr.io/msmidegas/homelab-web:latest
           imagePullPolicy: Always
-          
+
           ports:
             - containerPort: 3000
+
+          envFrom:
+            - configMapRef:
+                name: homelab-web-config
 
           env:
             - name: POSTGRES_USER
@@ -42,6 +48,9 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_DB
-          envFrom:
-            - configMapRef:
-                  name: homelab-web-config
+
+            - name: POSTGRES_HOST
+              value: db
+
+            - name: POSTGRES_PORT
+              value: "5432"
