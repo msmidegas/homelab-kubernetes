@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homelab-web
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: homelab-web
+
+  template:
+    metadata:
+      labels:
+        app: homelab-web
+
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/msmidegas/homelab-web:latest
+          imagePullPolicy: Always
+
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+
+            - name: POSTGRES_PASSWORD
+              value: postgres
+
+            - name: POSTGRES_DB
+              value: appdb
+
+          ports:
+            - containerPort: 3000
