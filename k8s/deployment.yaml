@@ -20,16 +20,28 @@ spec:
         - name: web
           image: ghcr.io/msmidegas/homelab-web:latest
           imagePullPolicy: Always
+          
+          ports:
+            - containerPort: 3000
 
           env:
             - name: POSTGRES_USER
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
 
             - name: POSTGRES_PASSWORD
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
 
             - name: POSTGRES_DB
-              value: appdb
-
-          ports:
-            - containerPort: 3000
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
+          envFrom:
+            - configMapRef:
+                  name: homelab-web-config
