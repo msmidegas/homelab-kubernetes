@@ -3,6 +3,7 @@ kind: Deployment
 
 metadata:
   name: postgres
+  namespace: homelab
 
 spec:
   replicas: 1
@@ -24,7 +25,32 @@ spec:
 
           ports:
             - containerPort: 5432
+          
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - postgres
+            initialDelaySeconds: 10
+            periodSeconds: 10
 
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - postgres
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
           envFrom:
             - secretRef:
                 name: postgres-secret
@@ -45,7 +71,7 @@ kind: Service
 
 metadata:
   name: db
-
+  namespace: homelab
 spec:
   selector:
     app: postgres

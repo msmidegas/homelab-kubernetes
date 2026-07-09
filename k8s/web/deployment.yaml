@@ -3,7 +3,7 @@ kind: Deployment
 
 metadata:
   name: homelab-web
-
+  namespace: homelab
 spec:
   replicas: 1
 
@@ -25,6 +25,28 @@ spec:
 
           ports:
             - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
 
           envFrom:
             - configMapRef:

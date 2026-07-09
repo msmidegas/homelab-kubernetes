@@ -4,7 +4,7 @@ kind: ConfigMap
 
 metadata:
   name: homelab-web-config
-
+  namespace: homelab
 data:
   LOG_LEVEL: info
   NODE_ENV: production

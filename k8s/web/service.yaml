@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: homelab-web-service
+  namespace: homelab
 spec:
   selector:
     app: homelab-web
